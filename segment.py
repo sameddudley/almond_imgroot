@@ -55,57 +55,44 @@ def threshold(thresh_img, pixel_neighborhood, C):
     return mask
     
 
-def main(image_path, path_for_saving):
-    #read in the image
-    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    
-    #img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-    
-    assert img is not None, "file could not be read, check with os.path.exists()"
-    
-    thick_thresh = threshold(img, 201, 8)
-    
-    
-    
-    """
-    # Step 3: Find contours in the binary image
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Step 4: Create a new blank image to fill the contours
-    filled_image = np.zeros_like(mask)
-
-    # Step 5: Fill each contour (white color)
-    cv2.drawContours(filled_image, contours, -1, (255), thickness=cv2.FILLED)
-    """
-
-    
-    
-    
-    #final_mask = cv2.bitwise_and(mask, filled_image)
-    
-    
-    #saves_image
-    cv2.imwrite(path_for_saving, thick_thresh)
     
     
 ##############################
 #this block excecutes the code
 ##############################
 
+
+
+#check for or create results folder
+cwd = os.getcwd()
+results = os.path.join(cwd, 'segmented_images')
+if os.path.isdir(results):
+    print("results folder already exists")
+else:
+    print("making results folder")
+    os.mkdir(results)
+
+
 dir_path = input('enter path to directory of images')
-#dir_path = '/Users/sdudley/Library/CloudStorage/Box-Box/Bartlett Lab/Drought tolerant rootstock project/QTL Experiment/previous_testing_data/real_images_thresh'
-input("Do you have the right directory??")
+print(dir_path)
+
+
+
 for image_name in os.listdir(dir_path):
     
     print("processing " + image_name)
     #pathname to the image to process
     original_pathname = dir_path + '/' + image_name
+
+    #open and threshold image
+    img = cv2.imread(original_pathname, cv2.IMREAD_GRAYSCALE)
+    assert img is not None, "file could not be read, check with os.path.exists()"
+    thick_thresh = threshold(img, 501, 8)
+
     
-    #create path to save segmented image
-    prefix = image_name.split('.')
-    save_path = dir_path + '/' + prefix[0] + '_' + 'binary.tif'
-    
-    #segment current image in loop
-    main(original_pathname, save_path)
+    #save segmented image
+    save_path = results + '/' + image_name.split('.')[0] + '_' + 'binary.tif'
+    cv2.imwrite(save_path, thick_thresh)
     
 print("Finished")
