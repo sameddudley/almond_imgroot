@@ -15,7 +15,6 @@ Created on Fri Sep 29 13:54:28 2023
 import argparse
 import cv2
 import csv
-from func_timeout import func_timeout, FunctionTimedOut
 import itertools
 import matplotlib.pyplot as plt
 import matplotlib
@@ -150,6 +149,8 @@ class GroundTruth:
                     None
             branch_lengths = []
             for leaf in leaves:
+                print(leaf)
+                print(len(leaves))
                 min_leaf_path = (np.inf, None)
                 for branch in branches:
                     length = nx.shortest_path_length(G, source = branch, target = leaf)
@@ -184,6 +185,8 @@ class GroundTruth:
     
         df = []
         for node in nodes:
+            print(node)
+            print(len(nodes))
             my_pixel = pos_dict[node]
             radius = dist[my_pixel[0], my_pixel[1]]
             neighbors = [neighbor for neighbor in G.neighbors(node)]

@@ -5,3 +5,4 @@ __pycache__/
 testers/
 results/
 segmented_images/
+cropped_tifs/
